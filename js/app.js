@@ -6,6 +6,7 @@ const loadCategories = () => {
 }
 
 const displayCategories = categories => {
+  console.log(categories);
   const categoriesContainer = document.getElementById('categories');
   categories.forEach(category => {
     const categoryList = document.createElement('div');
@@ -84,8 +85,16 @@ const displayNews = news => {
       toggleSpinner(false);
     })
   }
+  const categoryNumber = document.getElementById('category-number');
+  const numberDiv = document.createElement('div');
+  numberDiv.innerHTML = `
+      <p> "${news.length}" items found for this category" </p>
+  `;
+  categoryNumber.appendChild(numberDiv);
 
 }
+
+
 const loadNewsDetails = (details) => {
   const url = `https://openapi.programming-hero.com/api/news/${details}`;
   fetch(url)

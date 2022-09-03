@@ -59,7 +59,8 @@ const displayNews = (news, name) => {
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ``;
 
-
+    // sort the news views
+    news.sort((a, b) => b.total_view - a.total_view)
 
     news.forEach(showNews => {
       const newsDiv = document.createElement('div');

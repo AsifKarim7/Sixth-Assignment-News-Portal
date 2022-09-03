@@ -1,39 +1,39 @@
 const loadCategories = () => {
-    const url = 'https://openapi.programming-hero.com/api/news/categories';
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayCategories(data.data.news_category));
+  const url = 'https://openapi.programming-hero.com/api/news/categories';
+  fetch(url)
+    .then(res => res.json())
+    .then(data => displayCategories(data.data.news_category));
 }
 
 const displayCategories = categories => {
-    const categoriesContainer = document.getElementById('categories');
-    categories.forEach(category => {
-        const categoryList = document.createElement('div');
-        categoryList.innerHTML = `
+  const categoriesContainer = document.getElementById('categories');
+  categories.forEach(category => {
+    const categoryList = document.createElement('div');
+    categoryList.innerHTML = `
         <li onclick= "getNews('${category.category_id}')" class="list-group-item, px-4">${category.category_name}</li>
         `;
-        categoriesContainer.appendChild(categoryList);
-    })
+    categoriesContainer.appendChild(categoryList);
+  })
 
 }
 
 loadCategories();
 
 const getNews = (News) => {
-    const url = `https://openapi.programming-hero.com/api/news/category/${News}`;
-    fetch(url)
-        .then(res => res.json())
-        .then(data => displayNews(data.data));
+  const url = `https://openapi.programming-hero.com/api/news/category/${News}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => displayNews(data.data));
 }
 
 const displayNews = news => {
-    const newsContainer = document.getElementById('news-container');
-    newsContainer.innerHTML = ``;
-    news.forEach(showNews => {
-        const newsDiv = document.createElement('div');
-        newsDiv.classList.add('row', 'border', 'rounded', 'mb-4', 'p-4');
+  const newsContainer = document.getElementById('news-container');
+  newsContainer.innerHTML = ``;
+  news.forEach(showNews => {
+    const newsDiv = document.createElement('div');
+    newsDiv.classList.add('row', 'border', 'rounded', 'mb-4', 'p-4');
 
-        newsDiv.innerHTML = `
+    newsDiv.innerHTML = `
         
                   <div class="col-md-3">
                     <img src="${showNews.thumbnail_url}" class="news-img rounded" alt="image">
@@ -63,7 +63,7 @@ const displayNews = news => {
                   </div>
             
         `;
-        newsContainer.appendChild(newsDiv);
-    })
-
+    newsContainer.appendChild(newsDiv);
+  })
 }
+

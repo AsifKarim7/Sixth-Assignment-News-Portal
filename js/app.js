@@ -1,3 +1,4 @@
+// Load Categories from api
 const loadCategories = () => {
   const url = 'https://openapi.programming-hero.com/api/news/categories';
   fetch(url)
@@ -6,27 +7,27 @@ const loadCategories = () => {
 }
 
 const displayCategories = categories => {
-  console.log(categories);
-  const categoriesContainer = document.getElementById('categories');
+  const categoriesContainer = document.getElementById('categories-list');
   categories.forEach(category => {
     const categoryList = document.createElement('div');
     categoryList.innerHTML = `
-        <li onclick= "getNews('${category.category_id}')" class="list-group-item, px-4">${category.category_name}</li>
+        <li onclick= "getNews('${category.category_id}','${category.category_name}')" class="list-group-item, px-4">${category.category_name}</li>
         `;
     categoriesContainer.appendChild(categoryList);
   })
 
 }
 
-loadCategories();
-
-const getNews = (News) => {
+// get news Categories from api
+const getNews = (News, name) => {
   const url = `https://openapi.programming-hero.com/api/news/category/${News}`;
   fetch(url)
     .then(res => res.json())
-    .then(data => displayNews(data.data));
+    .then(data => displayNews(data.data, name));
+  toggleSpinner(true);
 }
 
+// toggle spinner
 const toggleSpinner = isLoading => {
   const loadingSection = document.getElementById('loader');
   if (isLoading) {
@@ -37,16 +38,29 @@ const toggleSpinner = isLoading => {
   }
 }
 
-const displayNews = news => {
-  toggleSpinner(true);
+// display news from api
+const displayNews = (news, name) => {
+  console.log(news);
   if (news.length == 0) {
     toggleSpinner(false);
-    const error = document.getElementById('error');
-    error.innerText = " Data not Found."
-  }
-  else {
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ``;
+
+    const error = document.getElementById('error');
+    error.innerText = "No items found."
+
+    const footer = document.getElementById('footer');
+    footer.classList.add('fixed-bottom');
+  }
+  else {
+    const footer = document.getElementById('footer');
+    footer.classList.remove('fixed-bottom');
+
+    const newsContainer = document.getElementById('news-container');
+    newsContainer.innerHTML = ``;
+
+
+
     news.forEach(showNews => {
       const newsDiv = document.createElement('div');
       newsDiv.classList.add('row', 'border', 'rounded', 'mb-4', 'p-4');
@@ -81,20 +95,28 @@ const displayNews = news => {
                     </div>
               
           `;
+
       newsContainer.appendChild(newsDiv);
       toggleSpinner(false);
+
+      const error = document.getElementById('error');
+      error.innerText = "";
     })
   }
+
+  // show items found from category
   const categoryNumber = document.getElementById('category-number');
+  categoryNumber.innerHTML = '';
   const numberDiv = document.createElement('div');
+  numberDiv.classList.add('p-2', 'bg-white', 'rounded')
   numberDiv.innerHTML = `
-      <p> "${news.length}" items found for this category" </p>
+      <p class='text-center fw-bold pt-2'>${news.length} items found for this ${name}</p>
   `;
   categoryNumber.appendChild(numberDiv);
-
 }
 
 
+// load news details from api
 const loadNewsDetails = (details) => {
   const url = `https://openapi.programming-hero.com/api/news/${details}`;
   fetch(url)
@@ -102,6 +124,8 @@ const loadNewsDetails = (details) => {
     .then(data => displayNewsDetails(data.data));
 }
 
+
+// display news details in modal
 const displayNewsDetails = (showDetails) => {
   const modalTitle = document.getElementById('newsDetailModalLabel');
   modalTitle.innerText = showDetails[0].title;
@@ -114,3 +138,6 @@ const displayNewsDetails = (showDetails) => {
  <p>Published Date: "${showDetails[0].author.published_date ? showDetails[0].author.published_date : 'Not Found'}"</p>
   `;
 }
+
+loadCategories();
+getNews();

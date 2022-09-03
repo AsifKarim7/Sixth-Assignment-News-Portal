@@ -78,7 +78,7 @@ const displayNews = (news, name) => {
                     <div class="col-md-9">
                       <div class="card-body">
                         <h5 class="card-title fw-bolder pb-4">${showNews.title}</h5>
-                        <p class="card-text text-secondary pb-3">${showNews.details.slice(0, 200)}</p>
+                        <p class="card-text text-secondary pb-3">${showNews.details.slice(0, 200)}...</p>
                       
                         <div class = "d-flex justify-content-between pt-5">
                         <div class= "d-flex ">

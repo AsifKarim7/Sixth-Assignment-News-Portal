@@ -3,7 +3,9 @@ const loadCategories = () => {
   const url = 'https://openapi.programming-hero.com/api/news/categories';
   fetch(url)
     .then(res => res.json())
-    .then(data => displayCategories(data.data.news_category));
+    .then(data => displayCategories(data.data.news_category))
+    .catch(error => console.log(error));
+
 }
 
 const displayCategories = categories => {
@@ -11,7 +13,7 @@ const displayCategories = categories => {
   categories.forEach(category => {
     const categoryList = document.createElement('div');
     categoryList.innerHTML = `
-        <li onclick= "getNews('${category.category_id}','${category.category_name}')" class="list-group-item, px-4">${category.category_name}</li>
+        <li onclick= "getNews('${category.category_id}','${category.category_name}')" class="list-group-item, px-4 py-md-0 py-1"><a href="#" class="text-decoration-none">${category.category_name}</a></li>
         `;
     categoriesContainer.appendChild(categoryList);
   })
@@ -23,7 +25,8 @@ const getNews = (News, name) => {
   const url = `https://openapi.programming-hero.com/api/news/category/${News}`;
   fetch(url)
     .then(res => res.json())
-    .then(data => displayNews(data.data, name));
+    .then(data => displayNews(data.data, name))
+    .catch(error => console.log(error));
   toggleSpinner(true);
 }
 
@@ -46,8 +49,8 @@ const displayNews = (news, name) => {
     const newsContainer = document.getElementById('news-container');
     newsContainer.innerHTML = ``;
 
-    const error = document.getElementById('error');
-    error.innerText = "No items found."
+    const errorText = document.getElementById('errorText');
+    errorText.innerText = "No items found."
 
     const footer = document.getElementById('footer');
     footer.classList.add('fixed-bottom');
@@ -64,7 +67,7 @@ const displayNews = (news, name) => {
 
     news.forEach(showNews => {
       const newsDiv = document.createElement('div');
-      newsDiv.classList.add('row', 'border', 'rounded', 'mb-4', 'p-4');
+      newsDiv.classList.add('row', 'border', 'rounded', 'mb-4', 'p-4', 'bg-white');
 
       newsDiv.innerHTML = `
           
@@ -79,7 +82,7 @@ const displayNews = (news, name) => {
                       
                         <div class = "d-flex justify-content-between pt-5">
                         <div class= "d-flex ">
-                      <img  src="${showNews.author.img}" class=" author-img" alt="image">
+                      <img  src="${showNews.author.img}" class="author-img" alt="image">
   
                       <p class="card-text px-2"><small class="fw-bold">${showNews.author.name ? showNews.author.name : 'Not Found'}</small></p>
                       </div>
@@ -100,8 +103,8 @@ const displayNews = (news, name) => {
       newsContainer.appendChild(newsDiv);
       toggleSpinner(false);
 
-      const error = document.getElementById('error');
-      error.innerText = "";
+      const errorText = document.getElementById('errorText');
+      errorText.innerText = "";
     })
   }
 
@@ -111,7 +114,7 @@ const displayNews = (news, name) => {
   const numberDiv = document.createElement('div');
   numberDiv.classList.add('p-2', 'bg-white', 'rounded')
   numberDiv.innerHTML = `
-      <p class='text-center fw-bold pt-2'>${news.length} items found for this ${name}</p>
+      <p class='text-center fw-bold pt-2'>${news.length} items found for ${name}</p>
   `;
   categoryNumber.appendChild(numberDiv);
 }
@@ -122,7 +125,8 @@ const loadNewsDetails = (details) => {
   const url = `https://openapi.programming-hero.com/api/news/${details}`;
   fetch(url)
     .then(res => res.json())
-    .then(data => displayNewsDetails(data.data));
+    .then(data => displayNewsDetails(data.data))
+    .catch(error => console.log(error));
 }
 
 
@@ -141,4 +145,3 @@ const displayNewsDetails = (showDetails) => {
 }
 
 loadCategories();
-getNews();

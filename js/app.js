@@ -86,3 +86,22 @@ const displayNews = news => {
   }
 
 }
+const loadNewsDetails = (details) => {
+  const url = `https://openapi.programming-hero.com/api/news/${details}`;
+  fetch(url)
+    .then(res => res.json())
+    .then(data => displayNewsDetails(data.data));
+}
+
+const displayNewsDetails = (showDetails) => {
+  const modalTitle = document.getElementById('newsDetailModalLabel');
+  modalTitle.innerText = showDetails[0].title;
+
+  const newsDetails = document.getElementById('news-details');
+  newsDetails.innerHTML = `
+ <img class="my-4 w-100" src="${showDetails[0].thumbnail_url}"></img>
+ <p>"${showDetails[0].details.slice(0, 100)}"</p>
+ <p>Author Name: "${showDetails[0].author.name ? showDetails[0].author.name : 'Not Found'}"<p>
+ <p>Published Date: "${showDetails[0].author.published_date ? showDetails[0].author.published_date : 'Not Found'}"</p>
+  `;
+}
